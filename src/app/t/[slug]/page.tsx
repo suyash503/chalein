@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { tripUrl } from "@/lib/url";
 import {
   deadlineLabel,
   formatDateRange,
@@ -16,9 +17,6 @@ import OrganizerMemory from "@/components/OrganizerMemory";
 
 type Params = { params: Promise<{ slug: string }> };
 type Search = { searchParams: Promise<{ organizer?: string }> };
-
-const baseUrl = () =>
-  process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
 
 async function load(slug: string) {
   return db.trip.findUnique({
@@ -43,7 +41,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     openGraph: {
       title: trip.title,
       description: summary,
-      url: baseUrl() + "/t/" + slug,
+      url: tripUrl(slug),
     },
   };
 }
@@ -62,7 +60,7 @@ export default async function TripPage({ params, searchParams }: Params & Search
   if (!trip) notFound();
 
   const state = tripState(trip, trip.participants);
-  const url = baseUrl() + "/t/" + slug;
+  const url = tripUrl(slug);
   const message = shareMessage(trip, state, url);
   const dates = formatDateRange(trip.startDate, trip.endDate);
   const deadline = deadlineLabel(state.daysLeft);

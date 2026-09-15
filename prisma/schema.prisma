@@ -1,9 +1,9 @@
 // Chalein - trip coordination
-// SQLite for local dev. For production swap provider to "postgresql"
-// and point DATABASE_URL at Neon/Supabase. No other change needed.
+// Postgres everywhere - local dev points at the same hosted database as
+// production. One provider means no schema drift between environments.
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
