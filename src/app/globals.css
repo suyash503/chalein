@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #15181f;
+  --color-muted: #6b7280;
+  --color-paper: #fdfbf8;
+  --color-card: #ffffff;
+  --color-line: #e8e3dc;
+  --color-coral: #ff5a3c;
+  --color-coral-dark: #e0442a;
+  --color-coral-wash: #fff1ed;
+  --color-go: #0f7b5a;
+  --color-go-wash: #e8f5f0;
+  --color-hold: #b8760c;
+  --color-hold-wash: #fdf4e3;
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Inputs get a consistent base here so every form control on the site matches
+   without repeating a dozen utility classes on each one. */
+@layer components {
+  .field {
+    width: 100%;
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.9rem;
+    font-size: 1rem;
+    color: var(--color-ink);
+    outline: none;
+  }
+  .field::placeholder {
+    color: #a8a29b;
+  }
+  .field:focus-visible {
+    border-color: var(--color-coral);
+    box-shadow: 0 0 0 3px var(--color-coral-wash);
+  }
+
+  .label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 0.4rem;
+  }
+}
+
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-coral);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

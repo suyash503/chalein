@@ -1,0 +1,45 @@
+// Chalein - trip coordination
+// SQLite for local dev. For production swap provider to "postgresql"
+// and point DATABASE_URL at Neon/Supabase. No other change needed.
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Trip {
+  id             String    @id @default(cuid())
+  slug           String    @unique
+  title          String
+  destination    String
+  startDate      DateTime?
+  endDate        DateTime?
+  // Whole-trip estimate in rupees. Per-head is derived from this divided by
+  // the confirmed headcount, which is the number the group actually argues
+  // about and the reason anyone reopens the link.
+  estimatedTotal Int?
+  advanceAmount  Int?
+  decideBy       DateTime?
+  organizerToken String    @unique
+  createdAt      DateTime  @default(now())
+
+  participants Participant[]
+}
+
+model Participant {
+  id          String   @id @default(cuid())
+  tripId      String
+  name        String
+  status      String   @default("MAYBE") // IN | MAYBE | OUT
+  paidAdvance Boolean  @default(false)
+  claimToken  String   @unique
+  createdAt   DateTime @default(now())
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
